@@ -1,0 +1,17 @@
+spring:
+
+  application:
+    name: Web_4
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/web_lab_4
+    username: vladislavmedvedev
+    password: 123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
