@@ -1,8 +1,8 @@
 <template>
-  <div class="login_page">
+  <div class="auth_page">
     <Header></Header>
-    <div class="container login_container">
-      <form @submit.prevent="login">
+    <div class="container auth_container">
+      <form @submit.prevent="handleSubmit">
         <div>
           <label for="username">Login:</label>
           <input id="username" class="input" v-model="username" type="text" required />
@@ -13,40 +13,65 @@
         </div>
         <button class="button submit_button" type="submit">Submit</button>
       </form>
+      <p style="margin-top: 30px; display: flex; flex-direction: row">
+        {{ isRegister ? "Already have an account?" : "Don't have an account?" }}
+        <button class="button submit_button" @click="toggleMode">{{ isRegister ? "Authorization" : "Registration" }}</button>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Header from '@/components/HeaderComponent.vue'
+import Header from '@/components/HeaderComponent.vue';
 
 export default {
   components: {
-    Header
+    Header,
   },
   data() {
     return {
+      isRegister: false, // Mode: registration (true) or authorization (false)
       username: '',
       password: '',
     };
   },
   methods: {
-    async login() {
-      try {
-        // TODO: need to change the url
-        const response = await axios.post('http://localhost:8080/api/login', {
-          username: this.username,
-          password: this.password,
-        });
-        if (response.data.success) {
-          this.$router.push('/main');
-        } else {
-          alert('Неверные логин или пароль');
+    toggleMode() {
+      this.isRegister = !this.isRegister;
+      this.username = '';
+      this.password = '';
+    },
+    async handleSubmit() {
+      if (this.isRegister) {
+        // Registration request
+        try {
+          await axios.post('http://localhost:8080/api/register', {
+            username: this.username,
+            password: this.password,
+          });
+          alert('Registration successful!');
+          this.toggleMode();
+        } catch (error) {
+          console.error('Registration error:', error);
+          alert('Error during registration. Please try again.');
         }
-      } catch (error) {
-        console.error('Ошибка авторизации:', error);
-        alert('Ошибка на сервере');
+      } else {
+        // Authorization request
+        try {
+          const response = await axios.post('http://localhost:8080/api/login', {
+            username: this.username,
+            password: this.password,
+          });
+          if (response.data.success) {
+            this.$router.push('/main'); // Redirect to the main page
+          } else {
+            alert('Invalid username or password.');
+          }
+        } catch (error) {
+          console.error('Authorization error:', error);
+          alert('Error during authorization. Please try again.');
+        }
       }
     },
   },
@@ -54,13 +79,13 @@ export default {
 </script>
 
 <style scoped>
-  .login_page {
+  .auth_page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 
-  .login_container {
+  .auth_container {
     font-size: 18px;
     background: rgba(255, 255, 255, 0.45);
     margin-top: 40px;
@@ -78,4 +103,9 @@ export default {
     width: 100%;
     position: relative;
   }
+
+  .submit_button {
+    width: 100%;
+  }
+
 </style>
