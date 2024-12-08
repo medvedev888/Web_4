@@ -4,8 +4,8 @@
     <div class="container auth_container">
       <form @submit.prevent="handleSubmit">
         <div>
-          <label for="username">Login:</label>
-          <input id="username" class="input" v-model="username" type="text" required />
+          <label for="login">Login:</label>
+          <input id="login" class="input" v-model="login" type="text" required />
         </div>
         <div>
           <label for="password">Password:</label>
@@ -32,22 +32,22 @@ export default {
   data() {
     return {
       isRegister: false, // Mode: registration (true) or authorization (false)
-      username: '',
+      login: '',
       password: '',
     };
   },
   methods: {
     toggleMode() {
       this.isRegister = !this.isRegister;
-      this.username = '';
+      this.login = '';
       this.password = '';
     },
     async handleSubmit() {
       if (this.isRegister) {
         // Registration request
         try {
-          await axios.post('http://localhost:8080/api/register', {
-            username: this.username,
+          await axios.post('http://localhost:8080/register', {
+            login: this.login,
             password: this.password,
           });
           alert('Registration successful!');
@@ -60,13 +60,13 @@ export default {
         // Authorization request
         try {
           const response = await axios.post('http://localhost:8080/api/login', {
-            username: this.username,
+            login: this.login,
             password: this.password,
           });
           if (response.data.success) {
             this.$router.push('/main'); // Redirect to the main page
           } else {
-            alert('Invalid username or password.');
+            alert('Invalid login or password.');
           }
         } catch (error) {
           console.error('Authorization error:', error);
