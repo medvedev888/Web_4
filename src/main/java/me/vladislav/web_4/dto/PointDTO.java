@@ -14,4 +14,11 @@ public class PointDTO {
     private Double r;
     private Boolean result;
     private User owner;
+
+    public PointDTO(Double x, Double y, Double r, User owner) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.owner = owner;
+    }
 }

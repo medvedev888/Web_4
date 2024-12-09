@@ -1,64 +1,64 @@
 <template>
   <Header></Header>
   <!-- Graph container -->
-    <div class="container" id="graph">
-      <p>Graph</p>
-      <canvas id="canvas_graph_grid" width="490" height="490"></canvas>
-      <canvas id="canvas_graph_figures" width="490" height="490"></canvas>
-      <canvas id="canvas_graph_points" width="490" height="490"></canvas>
+  <div class="container" id="graph">
+    <p>Graph</p>
+    <canvas id="canvas_graph_grid" width="490" height="490"></canvas>
+    <canvas id="canvas_graph_figures" width="490" height="490"></canvas>
+    <canvas id="canvas_graph_points" width="490" height="490"></canvas>
+  </div>
+
+  <!-- Enter parameters container -->
+  <div class="container" id="parameters">
+    <p>Enter parameters</p>
+    <p style="margin-bottom: 10px">(Every parameter should be filled!):</p>
+
+    <div>
+      <form @submit.prevent="addPoint">
+        <div style="display: flex; flex-direction: column;">
+          <label for="x">Enter X:</label>
+          <input id="x" class="input" type="text" required v-model="x"/>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <label for="y">Enter Y:</label>
+          <input id="y" class="input" type="text" required v-model="y"/>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <label for="r">Enter R:</label>
+          <input id="r" class="input" type="text" required v-model="r"/>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <button class="button submit_button" type="submit">Submit</button>
+          <button class="button clear_button">Delete Points</button>
+        </div>
+      </form>
     </div>
 
-    <!-- Enter parameters container -->
-    <div class="container" id="parameters">
-      <p>Enter parameters</p>
-      <p style="margin-bottom: 10px">(Every parameter should be filled!):</p>
+  </div>
 
-      <div>
-        <form @submit.prevent="addPoint">
-          <div style="display: flex; flex-direction: column;">
-            <label for="x">Enter X:</label>
-            <input id="x" class="input" type="text" required v-model="x"/>
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <label for="y">Enter Y:</label>
-            <input id="y" class="input" type="text" required v-model="y"/>
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <label for="r">Enter R:</label>
-            <input id="r" class="input" type="text" required v-model="r"/>
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <button class="button submit_button" type="submit">Submit</button>
-            <button class="button clear_button">Delete Points</button>
-          </div>
-        </form>
-      </div>
+  <!-- Result Table Container -->
+  <div class="container" id="table">
+    <table>
+      <thead>
+      <tr style="display: flex;">
+        <td>X</td>
+        <td>Y</td>
+        <td>R</td>
+        <td>Result</td>
+      </tr>
+      </thead>
+      <tbody>
 
-    </div>
-
-    <!-- Result Table Container -->
-    <div class="container" id="table">
-      <table>
-        <thead>
-        <tr style="display: flex;">
-          <td>X</td>
-          <td>Y</td>
-          <td>R</td>
-          <td>Result</td>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
 
 import {defineComponent, onMounted} from "vue";
 import Header from "@/components/HeaderComponent.vue";
-import { initializeGraph } from "@/assets/js/graph.js";
+import {initializeGraph} from "@/assets/js/graph.js";
 import axios from 'axios';
 
 export default defineComponent({
@@ -70,19 +70,12 @@ export default defineComponent({
   },
   data() {
     return {
-      x: 0,
-      y: 0,
-      r: 0
+      x: 0.0,
+      y: 0.0,
+      r: 0.0
     };
   },
   methods: {
-    // getPoints() {
-    //   try {
-    //
-    //   } catch {
-    //
-    //   }
-    // },
     async addPoint() {
       console.log("add point started working")
       try {
@@ -94,17 +87,19 @@ export default defineComponent({
         });
         console.log(response);
 
-        // if(response.data.success){
-        //
-        // }
-      } catch(error){
+        if (response && response.data && response.data.success) {
+          console.log(response.data.point.x);
+          console.log(response.data.point.y);
+          console.log(response.data.point.r);
+        }
+      } catch (error) {
+        alert(error.response.data.message);
         console.log(error);
       }
     },
 
   }
 });
-
 
 
 </script>

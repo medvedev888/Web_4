@@ -63,12 +63,10 @@ export default {
           alert(response.data.message);
         }
       } catch (error) {
-        // Если ошибка пришла от сервера
         if (error) {
           alert(error.response.data.message);
           console.log()
         } else {
-          // Прочие ошибки (например, сетевые)
           console.error('Request error:', error);
           alert('An unexpected error occurred. Please try again later.');
         }

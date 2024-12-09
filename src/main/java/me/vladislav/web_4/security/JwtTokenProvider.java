@@ -22,7 +22,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getLoginFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

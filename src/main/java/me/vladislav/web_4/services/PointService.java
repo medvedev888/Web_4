@@ -12,13 +12,14 @@ public class PointService {
     private final PointRepository pointRepository;
 
     public PointDTO addPoint(PointDTO pointDTO) {
+        //TODO: need to change this block
         Point result = pointRepository.save(new Point(
                 pointDTO.getX(),
                 pointDTO.getY(),
                 pointDTO.getR(),
-                pointDTO.getResult(),
+                true,
                 pointDTO.getOwner()
-                ));
+        ));
         return new PointDTO(result.getX(),
                 result.getY(),
                 result.getR(),
