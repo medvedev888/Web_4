@@ -1,4 +1,4 @@
-let gridCtx, figuresCtx/*, pointsCtx*/;
+let gridCtx, figuresCtx, pointsCtx;
 //size of graph
 let canvasGraphGridWidth, canvasGraphGridHeight;
 // Main axes
@@ -11,11 +11,11 @@ let scaleX, scaleY;
 export function initializeGraph() {
     const canvasGraphGrid = document.getElementById("canvas_graph_grid");
     const canvasGraphFigures = document.getElementById("canvas_graph_figures");
-    // const canvasGraphPoints = document.getElementById("canvas_graph_points");
+    const canvasGraphPoints = document.getElementById("canvas_graph_points");
 
     gridCtx = canvasGraphGrid.getContext("2d");
     figuresCtx = canvasGraphFigures.getContext("2d");
-    // pointsCtx = canvasGraphPoints.getContext("2d");
+    pointsCtx = canvasGraphPoints.getContext("2d");
 
     //size of graph
     canvasGraphGridWidth = canvasGraphGrid.clientWidth;
@@ -97,22 +97,22 @@ function drawingMainAxes() {
 }
 
 //drawing point
-// function drawPoint(xCoord, yCoord, result) {
-//     if (result === "true") {
-//         pointsCtx.fillStyle = "#01ff7f";
-//     } else {
-//         pointsCtx.fillStyle = "#ee294b";
-//     }
-//     xCoord = xCoord * scaleX + xAxis;
-//     yCoord = yCoord * -1 * scaleY + yAxis;
-//     pointsCtx.beginPath();
-//     pointsCtx.globalAlpha = 1;
-//     pointsCtx.arc(xCoord, yCoord, 3, 0, 2 * Math.PI);
-//     pointsCtx.fill();
-//     pointsCtx.globalAlpha = 0.5;
-//     pointsCtx.fillStyle = "black";
-//     pointsCtx.closePath();
-// }
+export function drawPoint(xCoord, yCoord, result) {
+    if (result === true) {
+        pointsCtx.fillStyle = "#01ff7f";
+    } else {
+        pointsCtx.fillStyle = "#ee294b";
+    }
+    xCoord = xCoord * scaleX + xAxis;
+    yCoord = yCoord * -1 * scaleY + yAxis;
+    pointsCtx.beginPath();
+    pointsCtx.globalAlpha = 1;
+    pointsCtx.arc(xCoord, yCoord, 3, 0, 2 * Math.PI);
+    pointsCtx.fill();
+    pointsCtx.globalAlpha = 0.5;
+    pointsCtx.fillStyle = "black";
+    pointsCtx.closePath();
+}
 
 export function drawingFigure(r_value) {
 
@@ -155,15 +155,13 @@ export function deleteFigures() {
 }
 
 // to redraw points
-// function redrawPoints() {
-//     const tableRows = document.querySelectorAll('.table tbody tr');
-//     tableRows.forEach(x => {
-//         if (x.childNodes.length > 1) {
-//             const children = x.children;
-//             drawPoint(children[0].innerHTML, children[1].innerHTML, children[3].innerHTML);
-//         }
-//     });
-// }
+export function redrawPoints(listOfPoints) {
+    console.log("redrawPoints");
+    console.log(listOfPoints);
+    listOfPoints.forEach(point => {
+        drawPoint(point.x, point.y, point.result);
+    });
+}
 
 // window.addEventListener("load", () => {
 //     gridRendering();
