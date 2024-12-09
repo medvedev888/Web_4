@@ -34,4 +34,10 @@ public class UserService {
         return userRepository.findUserByLogin(login).orElseThrow(() -> new UserNotFoundException("Error when getting user by login. User not found."));
     }
 
+    public boolean checkPassword(String login, String password) {
+         User user = getUserByLogin(login);
+         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+
 }

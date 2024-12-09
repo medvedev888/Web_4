@@ -1,9 +1,10 @@
 package me.vladislav.web_4.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import me.vladislav.web_4.dto.UserDTO;
 import me.vladislav.web_4.exceptions.UserAlreadyExistException;
+import me.vladislav.web_4.exceptions.UserNotFoundException;
+import me.vladislav.web_4.security.JwtTokenProvider;
 import me.vladislav.web_4.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(
-            @RequestBody UserDTO userDTO,
-            HttpSession session
-    ) {
-        System.out.println("register method is working");
+    public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         String login = userDTO.getLogin();
-        System.out.println("login: " + login);
-
         try {
             userService.registerNewUserAccount(userDTO);
-            session.setAttribute("userID", userService.getUserByLogin(login).getId());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("success", true, "message", "User registered successfully"));
         } catch (UserAlreadyExistException exception) {
@@ -38,6 +33,23 @@ public class AuthenticationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("success", false, "message", "An unexpected error occurred"));
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) {
+        try {
+            String login = userDTO.getLogin();
+            String password = userDTO.getPassword();
+            if(userService.checkPassword(login, password)) {
+                String token = jwtTokenProvider.generateToken(login);
+                return ResponseEntity.ok(Map.of("success", true, "token", token,"message", "Login successful"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "Invalid login or password"));
+            }
+        } catch (UserNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "User with this login not found"));
         }
     }
 

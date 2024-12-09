@@ -43,38 +43,38 @@ export default {
       this.password = '';
     },
     async handleSubmit() {
-      if (this.isRegister) {
-        // Registration request
-        try {
-          await axios.post('http://localhost:8080/register', {
-            login: this.login,
-            password: this.password,
-          });
-          alert('Registration successful!');
-          this.toggleMode();
-        } catch (error) {
-          console.error('Registration error:', error);
-          alert('Error during registration. Please try again.');
-        }
-      } else {
-        // Authorization request
-        try {
-          const response = await axios.post('http://localhost:8080/api/login', {
-            login: this.login,
-            password: this.password,
-          });
-          if (response.data.success) {
-            this.$router.push('/main'); // Redirect to the main page
+      try {
+        const url = this.isRegister ? 'http://localhost:8080/register' : 'http://localhost:8080/login';
+        const response = await axios.post(url, {
+          login: this.login,
+          password: this.password,
+        });
+
+        if (response.data.success) {
+          if (this.isRegister) {
+            alert('Registration successful!');
+            this.toggleMode(); // Переключение на авторизацию
           } else {
-            alert('Invalid login or password.');
+            const token = response.data.token;
+            localStorage.setItem('authToken', token);
+            this.$router.push('/main'); // Переход на главную страницу
           }
-        } catch (error) {
-          console.error('Authorization error:', error);
-          alert('Error during authorization. Please try again.');
+        } else {
+          alert(response.data.message);
+        }
+      } catch (error) {
+        // Если ошибка пришла от сервера
+        if (error) {
+          alert(error.response.data.message);
+          console.log()
+        } else {
+          // Прочие ошибки (например, сетевые)
+          console.error('Request error:', error);
+          alert('An unexpected error occurred. Please try again later.');
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

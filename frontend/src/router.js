@@ -3,8 +3,19 @@ import LoginPage from './pages/LoginPage.vue';
 import MainPage from './pages/MainPage.vue';
 
 const routes = [
-    { path: '/', component: LoginPage },  // Стартовая страница
-    { path: '/main', component: MainPage } // Основная страница
+    { path: '/', component: LoginPage },
+    {
+        path: '/main',
+        component: MainPage,
+        beforeEnter: (to, from, next) => {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                next();
+            } else {
+                next('/');
+            }
+        }
+    }
 ];
 
 const router = createRouter({
