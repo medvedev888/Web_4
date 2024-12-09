@@ -148,10 +148,9 @@ export function deleteFigures() {
     figuresCtx.beginPath();
     figuresCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
     figuresCtx.closePath();
-    // TODO: need to change this block
-    // pointsCtx.beginPath();
-    // pointsCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
-    // pointsCtx.closePath();
+    pointsCtx.beginPath();
+    pointsCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
+    pointsCtx.closePath();
 }
 
 // to redraw points

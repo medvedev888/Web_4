@@ -13,4 +13,6 @@ public interface PointRepository extends JpaRepository<Point, Integer> {
     <S extends Point> S save(S entity);
 
     List<Point> getPointsByOwner(User owner);
+
+    void deleteAllByOwner(User owner);
 }

@@ -39,6 +39,19 @@ public class PointController {
         }
     }
 
+    @DeleteMapping("/points")
+    public ResponseEntity<?> deleteAllPoints(HttpServletRequest httpServletRequest) {
+        try {
+            String token = httpServletRequest.getHeader("Authorization");
+            String login = jwtTokenProvider.getLoginFromToken(token);
+            pointService.deleteAllPoints(userService.getUserByLogin(login));
+            return ResponseEntity.ok().body(Map.of("success", true, "message", "Points successfully deleted"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "Server Error"));
+        }
+    }
+
     @GetMapping("/points")
     public ResponseEntity<?> getListOfPoints(HttpServletRequest httpServletRequest) {
         try {
@@ -51,6 +64,5 @@ public class PointController {
             return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "Server Error"));
         }
     }
-
 
 }

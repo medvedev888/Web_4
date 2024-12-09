@@ -29,7 +29,7 @@
         </div>
         <div style="display: flex; flex-direction: column;">
           <button class="button submit_button" type="submit">Submit</button>
-          <button class="button clear_button">Delete Points</button>
+          <button class="button clear_button" type="button" @click="deleteAllPoints">Delete Points</button>
         </div>
       </form>
     </div>
@@ -81,10 +81,13 @@ export default defineComponent({
       if (r) {
         deleteFigures();
         drawingFigure(parseFloat(r));
+        redrawPoints(this.points);
       }
     },
     points(points) {
       if(points) {
+        deleteFigures();
+        drawingFigure(parseFloat(this.r));
         redrawPoints(points);
       }
     }
@@ -117,6 +120,15 @@ export default defineComponent({
         this.points = response.data.listOfPoints;
       } catch (error) {
         console.error("Error when getting list of points", error);
+      }
+    },
+    async deleteAllPoints() {
+      try {
+        const url = 'http://localhost:8080/points';
+        await axios.delete(url);
+        await this.getListOfPoints();
+      } catch (error) {
+        console.error("Error when deleting points", error);
       }
     }
   },
