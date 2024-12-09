@@ -2,9 +2,9 @@ package me.vladislav.web_4.services;
 
 import lombok.RequiredArgsConstructor;
 import me.vladislav.web_4.dto.UserDTO;
-import me.vladislav.web_4.models.User;
 import me.vladislav.web_4.exceptions.UserAlreadyExistException;
 import me.vladislav.web_4.exceptions.UserNotFoundException;
+import me.vladislav.web_4.models.User;
 import me.vladislav.web_4.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -33,11 +33,16 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token);
             return true;
+        } catch (SignatureException e) {
+            System.out.println("Invalid JWT signature: " + e.getMessage());
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            System.out.println("Invalid JWT token: " + e.getMessage());
         }
+        return false;
     }
 }
 

@@ -33,7 +33,7 @@ export default {
     return {
       isRegister: false, // Mode: registration (true) or authorization (false)
       login: '',
-      password: '',
+      password: ''
     };
   },
   methods: {
@@ -50,7 +50,7 @@ export default {
           password: this.password,
         });
 
-        if (response.data.success) {
+        if (response && response.data && response.data.success) {
           if (this.isRegister) {
             alert('Registration successful!');
             this.toggleMode(); // Переключение на авторизацию

@@ -8,6 +8,7 @@ import me.vladislav.web_4.security.JwtTokenProvider;
 import me.vladislav.web_4.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthenticationController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
