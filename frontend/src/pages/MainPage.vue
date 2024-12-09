@@ -61,18 +61,13 @@
 
 <script>
 
-import {defineComponent, onMounted} from "vue";
+import {defineComponent} from "vue";
 import Header from "@/components/HeaderComponent.vue";
 import {initializeGraph, drawingFigure, deleteFigures} from "@/assets/js/graph.js";
 import axios from 'axios';
 
 export default defineComponent({
   components: {Header},
-  setup() {
-    onMounted(() => {
-      initializeGraph();
-    });
-  },
   data() {
     return {
       x: 0.0,
@@ -91,7 +86,6 @@ export default defineComponent({
   },
   methods: {
     async addPoint() {
-      console.log("add point started working")
       try {
         const url = 'http://localhost:8080/point';
         const response = await axios.post(url, {
@@ -109,7 +103,20 @@ export default defineComponent({
         }
         console.log(error);
       }
+    },
+    async getListOfPoints() {
+      try {
+        const url = 'http://localhost:8080/points';
+        const response = await axios.get(url);
+        this.points = response.data.listOfPoints;
+      } catch (error) {
+        console.error("Error when getting list of points", error);
+      }
     }
+  },
+  mounted() {
+    initializeGraph();
+    this.getListOfPoints();
   }
 });
 

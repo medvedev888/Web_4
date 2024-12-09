@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class AddPointResponseDTO {
+public class PointResponseDTO {
     private Double x;
     private Double y;
     private Double r;
