@@ -38,9 +38,9 @@
 
   <!-- Result Table Container -->
   <div class="container" id="table">
-    <table>
+    <table style="width: 100%;">
       <thead>
-      <tr style="display: flex;">
+      <tr style="display: flex; justify-content: space-around;">
         <td>X</td>
         <td>Y</td>
         <td>R</td>
@@ -48,7 +48,12 @@
       </tr>
       </thead>
       <tbody>
-
+      <tr v-for="(point, index) in points" :key="index" style="display: flex; justify-content: space-around;">
+        <td>{{ point.x }}</td>
+        <td>{{ point.y }}</td>
+        <td>{{ point.r }}</td>
+        <td>{{ point.result }}</td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -72,7 +77,8 @@ export default defineComponent({
     return {
       x: 0.0,
       y: 0.0,
-      r: 0.0
+      r: 0.0,
+      points: []
     };
   },
   watch: {
@@ -93,9 +99,14 @@ export default defineComponent({
           y: parseFloat(this.y),
           r: parseFloat(this.r)
         });
-        console.log(response);
+        this.points.push(response.data.point);
+        console.log(this.points);
       } catch (error) {
-        alert(error.response.data.message);
+        if (error.response && error.response.data) {
+          alert(error.response.data.message);
+        } else {
+          alert("An error occurred while adding the point.");
+        }
         console.log(error);
       }
     }
