@@ -58,7 +58,7 @@
 
 import {defineComponent, onMounted} from "vue";
 import Header from "@/components/HeaderComponent.vue";
-import {initializeGraph} from "@/assets/js/graph.js";
+import {initializeGraph, drawingFigure, deleteFigures} from "@/assets/js/graph.js";
 import axios from 'axios';
 
 export default defineComponent({
@@ -75,6 +75,14 @@ export default defineComponent({
       r: 0.0
     };
   },
+  watch: {
+    r(r) {
+      if (r) {
+        deleteFigures();
+        drawingFigure(parseFloat(r));
+      }
+    }
+  },
   methods: {
     async addPoint() {
       console.log("add point started working")
@@ -86,18 +94,11 @@ export default defineComponent({
           r: parseFloat(this.r)
         });
         console.log(response);
-
-        if (response && response.data && response.data.success) {
-          console.log(response.data.point.x);
-          console.log(response.data.point.y);
-          console.log(response.data.point.r);
-        }
       } catch (error) {
         alert(error.response.data.message);
         console.log(error);
       }
-    },
-
+    }
   }
 });
 

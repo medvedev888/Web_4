@@ -1,4 +1,4 @@
-let gridCtx/*, figuresCtx, pointsCtx*/;
+let gridCtx, figuresCtx/*, pointsCtx*/;
 //size of graph
 let canvasGraphGridWidth, canvasGraphGridHeight;
 // Main axes
@@ -10,11 +10,11 @@ let scaleX, scaleY;
 
 export function initializeGraph() {
     const canvasGraphGrid = document.getElementById("canvas_graph_grid");
-    // const canvasGraphFigures = document.getElementById("canvas_graph_figures");
+    const canvasGraphFigures = document.getElementById("canvas_graph_figures");
     // const canvasGraphPoints = document.getElementById("canvas_graph_points");
 
     gridCtx = canvasGraphGrid.getContext("2d");
-    // figuresCtx = canvasGraphFigures.getContext("2d");
+    figuresCtx = canvasGraphFigures.getContext("2d");
     // pointsCtx = canvasGraphPoints.getContext("2d");
 
     //size of graph
@@ -114,44 +114,45 @@ function drawingMainAxes() {
 //     pointsCtx.closePath();
 // }
 
-// function drawingFigure(r_value) {
-//
-//     //drawing square
-//     figuresCtx.beginPath();
-//     figuresCtx.strokeStyle = "#000000";
-//     figuresCtx.globalAlpha = 0.5;
-//     figuresCtx.fillRect(xAxis, yAxis, r_value * scaleX, r_value * (scaleY / 2));
-//     figuresCtx.closePath();
-//
-//     //drawing triangle
-//     figuresCtx.beginPath();
-//     figuresCtx.moveTo(xAxis, yAxis);
-//     figuresCtx.lineTo(xAxis, yAxis + r_value * scaleY);
-//     figuresCtx.lineTo(xAxis - (r_value * scaleY), yAxis);
-//     figuresCtx.strokeStyle = "#002636";
-//     figuresCtx.globalAlpha = 0.5;
-//     figuresCtx.fill();
-//     figuresCtx.closePath();
-//
-//     //drawing quadrant of a circle
-//     figuresCtx.beginPath();
-//     figuresCtx.strokeStyle = "#002636";
-//     figuresCtx.globalAlpha = 0.5;
-//     figuresCtx.moveTo(xAxis, yAxis);
-//     figuresCtx.arc(xAxis, yAxis, r_value * scaleX, 0, (3 * Math.PI) / 2, true);
-//     figuresCtx.fill();
-//     figuresCtx.closePath();
-// }
+export function drawingFigure(r_value) {
+
+    //drawing square
+    figuresCtx.beginPath();
+    figuresCtx.strokeStyle = "#000000";
+    figuresCtx.globalAlpha = 0.5;
+    figuresCtx.fillRect(xAxis, yAxis, r_value * scaleX, r_value * (scaleY / 2));
+    figuresCtx.closePath();
+
+    //drawing triangle
+    figuresCtx.beginPath();
+    figuresCtx.moveTo(xAxis, yAxis);
+    figuresCtx.lineTo(xAxis, yAxis + r_value * scaleY);
+    figuresCtx.lineTo(xAxis - (r_value * scaleY), yAxis);
+    figuresCtx.strokeStyle = "#002636";
+    figuresCtx.globalAlpha = 0.5;
+    figuresCtx.fill();
+    figuresCtx.closePath();
+
+    //drawing quadrant of a circle
+    figuresCtx.beginPath();
+    figuresCtx.strokeStyle = "#002636";
+    figuresCtx.globalAlpha = 0.5;
+    figuresCtx.moveTo(xAxis, yAxis);
+    figuresCtx.arc(xAxis, yAxis, r_value * scaleX, 0, (3 * Math.PI) / 2, true);
+    figuresCtx.fill();
+    figuresCtx.closePath();
+}
 
 // to delete figures
-// function deleteFigures() {
-//     figuresCtx.beginPath();
-//     figuresCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
-//     figuresCtx.closePath();
-//     pointsCtx.beginPath();
-//     pointsCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
-//     pointsCtx.closePath();
-// }
+export function deleteFigures() {
+    figuresCtx.beginPath();
+    figuresCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
+    figuresCtx.closePath();
+    // TODO: need to change this block
+    // pointsCtx.beginPath();
+    // pointsCtx.clearRect(0, 0, canvasGraphGridWidth, canvasGraphGridHeight);
+    // pointsCtx.closePath();
+}
 
 // to redraw points
 // function redrawPoints() {
