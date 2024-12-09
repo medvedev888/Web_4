@@ -39,6 +39,15 @@ public class PointService {
         pointRepository.deleteAllByOwner(owner);
     }
 
+    @Transactional
+    public void updatePointsWithNewR(double newR, User owner) {
+        List<Point> listOfPoints = pointRepository.getPointsByOwner(owner);
+        for (Point point : listOfPoints) {
+            boolean result = checkArea(point.getX(), point.getY(), newR);
+            pointRepository.updateRAndResultByPointId(newR, result, point.getId());
+        }
+    }
+
     public List<PointResponseDTO> getListOfPoint(User owner) {
         List<Point> listOfPoints = pointRepository.getPointsByOwner(owner);
         List<PointResponseDTO> listOfPointsDTO = new ArrayList<>();

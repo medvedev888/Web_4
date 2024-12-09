@@ -48,7 +48,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(point, index) in points" :key="index" style="display: flex; justify-content: space-around;">
+      <tr v-for="(point, index) in points.slice().reverse()" :key="index" style="display: flex; justify-content: space-around;">
         <td>{{ point.x }}</td>
         <td>{{ point.y }}</td>
         <td>{{ point.r }}</td>
@@ -79,6 +79,7 @@ export default defineComponent({
   watch: {
     r(r) {
       if (r) {
+        this.updatePointsWithNewR();
         deleteFigures();
         drawingFigure(parseFloat(r));
         redrawPoints(this.points);
@@ -129,6 +130,18 @@ export default defineComponent({
         await this.getListOfPoints();
       } catch (error) {
         console.error("Error when deleting points", error);
+      }
+    },
+    async updatePointsWithNewR() {
+      try {
+        const url = 'http://localhost:8080/points/r';
+        const response = await axios.patch(url, {
+          r : parseFloat(this.r)
+        });
+        console.log(response.data);
+        await this.getListOfPoints();
+      } catch (error) {
+        console.error("Error when updating points with new R", error);
       }
     }
   },

@@ -2,8 +2,9 @@ package me.vladislav.web_4.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import me.vladislav.web_4.dto.request.AddPointRequestDTO;
 import me.vladislav.web_4.dto.PointDTO;
+import me.vladislav.web_4.dto.request.AddPointRequestDTO;
+import me.vladislav.web_4.dto.request.UpdatePointsWithNewRDTO;
 import me.vladislav.web_4.dto.response.PointResponseDTO;
 import me.vladislav.web_4.models.User;
 import me.vladislav.web_4.security.JwtTokenProvider;
@@ -59,6 +60,25 @@ public class PointController {
             String login = jwtTokenProvider.getLoginFromToken(token);
             List<PointResponseDTO> listOfPoints = pointService.getListOfPoint(userService.getUserByLogin(login));
             return ResponseEntity.ok().body(Map.of("success", true, "listOfPoints", listOfPoints, "message", "Success"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "Server Error"));
+        }
+    }
+
+    @PatchMapping("/points/r")
+    public ResponseEntity<?> updatePointsWithNewR(
+            @RequestBody UpdatePointsWithNewRDTO updatePointsWithNewRDTO,
+            HttpServletRequest httpServletRequest
+    ) {
+//        TODO: add validation of r-value
+        try {
+            String token = httpServletRequest.getHeader("Authorization");
+            String login = jwtTokenProvider.getLoginFromToken(token);
+            User owner = userService.getUserByLogin(login);
+            double newR = updatePointsWithNewRDTO.getR();
+            pointService.updatePointsWithNewR(newR, owner);
+            return ResponseEntity.ok().body(Map.of("success", true, "message", "Points updated successfully"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "Server Error"));
