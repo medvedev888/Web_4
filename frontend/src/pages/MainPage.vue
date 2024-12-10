@@ -30,6 +30,7 @@
         <div style="display: flex; flex-direction: column;">
           <button class="button submit_button" type="submit">Submit</button>
           <button class="button clear_button" type="button" @click="deleteAllPoints">Delete Points</button>
+          <button class="button logout_button" type="button"  style="margin-top: 30px;" @click="logout">Logout</button>
         </div>
       </form>
     </div>
@@ -158,6 +159,11 @@ export default defineComponent({
         this.addPoint();
       });
     },
+    logout() {
+      console.log("logout");
+      localStorage.removeItem("authToken");
+      this.$router.push("/");
+    }
   },
   mounted() {
     initializeGraph();
@@ -169,7 +175,8 @@ export default defineComponent({
 </script>
 
 <style>
-.clear_button {
+.clear_button,
+.logout_button {
   margin-top: 5px;
   position: relative;
   color: #002636;
