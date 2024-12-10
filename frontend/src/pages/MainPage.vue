@@ -96,25 +96,29 @@ export default defineComponent({
   },
   methods: {
     async addPoint() {
-      console.log("addPoint");
-      console.log(this.x, this.y, this.r);
-      try {
-        const url = 'http://localhost:8080/point';
-        const response = await axios.post(url, {
-          x: parseFloat(this.x),
-          y: parseFloat(this.y),
-          r: parseFloat(this.r)
-        });
-        let point = response.data.point;
-        this.points.push(point);
-        drawPoint(point.x, point.y, point.result);
-      } catch (error) {
-        if (error.response && error.response.data) {
-          alert(error.response.data.message);
-        } else {
-          alert("An error occurred while adding the point.");
+      if(!this.validateX() ||
+      !this.validateY() ||
+      !this.validateR()) {
+        alert("Not valid parameters");
+      } else {
+        try {
+          const url = 'http://localhost:8080/point';
+          const response = await axios.post(url, {
+            x: parseFloat(this.x),
+            y: parseFloat(this.y),
+            r: parseFloat(this.r)
+          });
+          let point = response.data.point;
+          this.points.push(point);
+          drawPoint(point.x, point.y, point.result);
+        } catch (error) {
+          if (error.response && error.response.data) {
+            alert(error.response.data.message);
+          } else {
+            alert("An error occurred while adding the point.");
+          }
+          console.log(error);
         }
-        console.log(error);
       }
     },
     async getListOfPoints() {
@@ -163,6 +167,42 @@ export default defineComponent({
       console.log("logout");
       localStorage.removeItem("authToken");
       this.$router.push("/");
+    },
+    validateX() {
+      const value = parseFloat(this.x);
+      if (isNaN(value)) {
+        alert("X must be a number.");
+        return false;
+      } else if (!(value >= -3 && value <= 5)) {
+        alert("X must be greater than -3 and less than 5.");
+        return false;
+      } else {
+        return true;
+      }
+    },
+    validateY() {
+      const value = parseFloat(this.y);
+      if (isNaN(value)) {
+        alert("Y must be a number.");
+        return false;
+      } else if (!(value >= -5 && value <= 3)) {
+        alert("Y must be greater than -5 and less than 3.");
+        return false;
+      } else {
+        return true;
+      }
+    },
+    validateR() {
+      const value = parseFloat(this.r);
+      if (isNaN(value)) {
+        alert("R must be a number.");
+        return false;
+      } else if (!(value >= -3 && value <= 5)) {
+        alert("R must be greater than -3 and less than 5.");
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   mounted() {
