@@ -5,7 +5,7 @@
     <p>Graph</p>
     <canvas id="canvas_graph_grid" width="490" height="490"></canvas>
     <canvas id="canvas_graph_figures" width="490" height="490"></canvas>
-    <canvas id="canvas_graph_points" width="490" height="490"></canvas>
+    <canvas id="canvas_graph_points" width="490" height="490" @click="handleClick"></canvas>
   </div>
 
   <!-- Enter parameters container -->
@@ -63,7 +63,7 @@
 
 import {defineComponent} from "vue";
 import Header from "@/components/HeaderComponent.vue";
-import {initializeGraph, drawingFigure, deleteFigures, drawPoint, redrawPoints} from "@/assets/js/graph.js";
+import {initializeGraph, drawingFigure, deleteFigures, drawPoint, redrawPoints, getCoordinatesWhenMouseMove} from "@/assets/js/graph.js";
 import axios from 'axios';
 
 export default defineComponent({
@@ -95,6 +95,8 @@ export default defineComponent({
   },
   methods: {
     async addPoint() {
+      console.log("addPoint");
+      console.log(this.x, this.y, this.r);
       try {
         const url = 'http://localhost:8080/point';
         const response = await axios.post(url, {
@@ -143,7 +145,19 @@ export default defineComponent({
       } catch (error) {
         console.error("Error when updating points with new R", error);
       }
-    }
+    },
+    handleClick(event) {
+      console.log("handle click");
+      const { xCoordinate: x, yCoordinate: y } = getCoordinatesWhenMouseMove(event);
+
+      console.log(x, y);
+      this.x = x;
+      this.y = y;
+
+      this.$nextTick(() => {
+        this.addPoint();
+      });
+    },
   },
   mounted() {
     initializeGraph();

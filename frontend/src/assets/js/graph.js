@@ -6,7 +6,7 @@ let xAxis, yAxis;
 // size of grid
 let scaleX, scaleY;
 // coordinate for sending, when click on graph
-// let xCoordinate, yCoordinate;
+let xCoordinate, yCoordinate;
 
 export function initializeGraph() {
     const canvasGraphGrid = document.getElementById("canvas_graph_grid");
@@ -162,27 +162,9 @@ export function redrawPoints(listOfPoints) {
     });
 }
 
-// window.addEventListener("load", () => {
-//     gridRendering();
-//     drawingMainAxes();
-//     // drawingFigure(JSON.parse(decodeURIComponent(urlParams.get('r'))));
-//     // redrawPoints(arrayPoints);
-// })
+export function getCoordinatesWhenMouseMove(event){
+    xCoordinate = ((event.offsetX - xAxis) / scaleX).toFixed(2);
+    yCoordinate = ((-1) * ((event.offsetY - yAxis) / scaleY)).toFixed(2);
+    return {xCoordinate, yCoordinate};
+}
 
-// document.querySelector('#canvas_graph_points').onmousemove = function (event) {
-//     event = event || window.event
-//     xCoordinate = ((event.offsetX - xAxis) / scaleX).toFixed(2);
-//     yCoordinate = ((-1) * ((event.offsetY - yAxis) / scaleY)).toFixed(2);
-// }
-//
-// document.querySelector('#canvas_graph_points').onclick = function () {
-//     // TODO: change this block
-//     const xInput = document.querySelector('.x-value');
-//     const yInput = document.querySelector('.y-input');
-//     const submitButton = document.querySelector('.submit_button');
-//
-//     xInput.value = xCoordinate;
-//     yInput.value = yCoordinate;
-//
-//     submitButton.click();
-// }
